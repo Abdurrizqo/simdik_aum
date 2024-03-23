@@ -5,8 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/logo.png') }}">
     @vite('resources/css/app.css')
-    <title>Document</title>
+    <title>SIMDIK AUM KUTIM</title>
 </head>
 
 <body class="flex flex-col relative">

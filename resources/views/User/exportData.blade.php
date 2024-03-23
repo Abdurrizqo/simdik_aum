@@ -10,7 +10,7 @@
 
         <div class="w-full flex justify-center">
             <div class="w-[32rem] border shadow rounded-md p-10">
-                <h1 class="text-center font-bold text-xl">Tambah Data Admin</h1>
+                <h1 class="text-center font-bold text-xl">FORM EXPORT DATA PEGAWAI</h1>
 
                 <form method="POST" class="mt-6 w-full flex flex-col gap-3">
                     @csrf

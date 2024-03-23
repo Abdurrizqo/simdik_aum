@@ -4,7 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/logo.png') }}">
     @vite('resources/css/app.css')
+    <title>SIMDIK AUM KUTIM</title>
 </head>
 
 <body class="w-full">
@@ -130,7 +133,8 @@
 
                 <label class="form-control w-full mt-6">
                     <div class="label">
-                        <span class="label-text font-semibold text-lg">Alamat<span class="text-red-400">*</span></span>
+                        <span class="label-text font-semibold text-lg">Alamat<span
+                                class="text-red-400">*</span></span>
                     </div>
                     <textarea name="alamat" class="textarea textarea-bordered h-28" placeholder="Alamat">
                     {{ old('alamat') }}
