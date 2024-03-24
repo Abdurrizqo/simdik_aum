@@ -49,8 +49,7 @@
             <form method="dialog" class="flex justify-center gap-8">
                 <button class="btn btn-primary w-40">Close</button>
                 <a id="linkGantiStatus"
-                    class="btn-cus border-secondary border flex justify-center items-center rounded-md hover:text-white text-secondary w-40 hover:bg-secondary">Non
-                    Aktif</a>
+                    class="btn-cus border-secondary border flex justify-center items-center rounded-md hover:text-white text-secondary w-40 hover:bg-secondary"></a>
             </form>
         </div>
     </div>
@@ -215,9 +214,11 @@
             titleModalGantiStatus.textContent = `Apakah Anda Yakin Untuk Mengubah Status Data AUM ${namaAum}`;
 
             if (status == 1) {
+                linkGantiStatus.textContent = 'Non Aktifkan'
                 ketStatus.textContent = `Menonaktifkan Izin Tambah Pegawai Akan Berakibat Kepada
                 Admin AUM Tersebut Tidak Dapat Menambahkan Pegawai`;
             } else {
+                linkGantiStatus.textContent = 'Aktifkan'
                 ketStatus.textContent = `Mengaktifkan Izin Tambah Pegawai Akan Berakibat Kepada
                 Admin AUM Tersebut Dapat Menambahkan Pegawai Baru`;
             }

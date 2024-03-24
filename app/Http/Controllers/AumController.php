@@ -13,7 +13,7 @@ class AumController extends Controller
 {
     public function listAumController()
     {
-        $listAum = Aum::get();
+        $listAum = Aum::orderBy('namaAum', 'asc')->get();
 
         return view('Aum/listAum', ['aum' => $listAum]);
     }

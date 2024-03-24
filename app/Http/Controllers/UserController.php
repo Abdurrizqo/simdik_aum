@@ -85,7 +85,8 @@ class UserController extends Controller
         $query = User::select(['users.idUser', 'users.idAum', 'nickname', 'username', 'isProfileDone', 'role', 'status', 'idTugasPokok', 'idProfile', 'namaAum'])
             ->where('role', 'user')
             ->where('isActive', 1)
-            ->leftJoin('aum', 'users.idAum', '=', 'aum.idAum');
+            ->leftJoin('aum', 'users.idAum', '=', 'aum.idAum')
+            ->orderBy('nickname', 'asc');
 
         if ($user->role === 'admin') {
             if ($idAum === null && $status === null && $filterVerifProfile === null && $search === null) {
@@ -137,7 +138,8 @@ class UserController extends Controller
         $query = User::select(['users.idUser', 'users.idAum', 'nickname', 'username', 'isProfileDone', 'role', 'status', 'idTugasPokok', 'idProfile', 'namaAum'])
             ->where('role', 'user')
             ->where('isActive', 0)
-            ->leftJoin('aum', 'users.idAum', '=', 'aum.idAum');
+            ->leftJoin('aum', 'users.idAum', '=', 'aum.idAum')
+            ->orderBy('nickname', 'asc');
 
         if ($user->role === 'admin') {
             if ($idAum === null && $status === null && $filterVerifProfile === null && $search === null) {
@@ -184,7 +186,8 @@ class UserController extends Controller
             $listAdmin = User::select(['users.idUser', 'nickname', 'username', 'namaAum'])
                 ->where('role', 'adminaum')
                 ->leftJoin('aum', 'users.idAum', '=', 'aum.idAum')
-                ->paginate(10);
+                ->paginate(10)
+                ->orderBy('nickname', 'asc');
         } else {
             $listAdmin = User::select(['users.idUser', 'nickname', 'username', 'namaAum'])
                 ->where('role', 'adminaum')
