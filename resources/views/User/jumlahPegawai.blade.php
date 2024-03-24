@@ -2,7 +2,7 @@
 @section('content')
     <div class="w-full">
         <div class="mb-8">
-            <h1 class="text-2xl font-bold">Rekap Daftar Pegawai Seluruh AUM</h1>
+            <h1 class="text-2xl font-bold">Rekap Daftar Pegawai</h1>
         </div>
 
         <div class="mt-10">

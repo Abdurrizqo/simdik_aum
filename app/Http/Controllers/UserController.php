@@ -99,6 +99,11 @@ class UserController extends Controller
                     $filterVerifProfile === 'true' ? $query->where('isProfileDone', true) : $query->where('isProfileDone', false);
                 }
 
+                $search ? $query->where(function ($query) use ($search) {
+                    $query->where('username', 'like', "%$search%")
+                        ->orWhere('nickname', 'like', "%$search%");
+                }) : null;
+
                 $listUser = $query->paginate(10)
                     ->withQueryString();
             }
@@ -186,8 +191,8 @@ class UserController extends Controller
             $listAdmin = User::select(['users.idUser', 'nickname', 'username', 'namaAum'])
                 ->where('role', 'adminaum')
                 ->leftJoin('aum', 'users.idAum', '=', 'aum.idAum')
-                ->paginate(10)
-                ->orderBy('nickname', 'asc');
+                ->orderBy('nickname', 'asc')
+                ->paginate(10);
         } else {
             $listAdmin = User::select(['users.idUser', 'nickname', 'username', 'namaAum'])
                 ->where('role', 'adminaum')
@@ -196,6 +201,7 @@ class UserController extends Controller
                         ->orWhere('nickname', 'like', "%$search%");
                 })
                 ->leftJoin('aum', 'users.idAum', '=', 'aum.idAum')
+                ->orderBy('nickname', 'asc')
                 ->paginate(10)
                 ->withQueryString();
         }
@@ -602,11 +608,14 @@ class UserController extends Controller
 
     public function jumlahPegawaiView()
     {
-        $totalSeluruhPegawai = User::where('role', 'user')->count();
-        $totalSeluruhPegawaiAktif = User::where('role', 'user')->where('isActive', true)->count();
-        $totalSeluruhPegawaiNonAktif = User::where('role', 'user')->where('isActive', false)->count();
+        $user = Auth::user();
 
-        $totalPegawaiPerAUM = User::selectRaw("COUNT(*) as total_user,
+        if ($user->role === 'admin') {
+            $totalSeluruhPegawai = User::where('role', 'user')->count();
+            $totalSeluruhPegawaiAktif = User::where('role', 'user')->where('isActive', true)->count();
+            $totalSeluruhPegawaiNonAktif = User::where('role', 'user')->where('isActive', false)->count();
+
+            $totalPegawaiPerAUM = User::selectRaw("COUNT(*) as total_user,
         SUM(CASE WHEN users.isActive = 1 THEN 1 ELSE 0 END) as total_user_active,
         SUM(CASE WHEN users.isActive = 0 THEN 1 ELSE 0 END) as total_user_inactive,
 
@@ -635,12 +644,51 @@ class UserController extends Controller
         SUM(CASE WHEN users.status = 'Guru Tamu' AND users.isActive = 0 THEN 1 ELSE 0 END) as total_guru_tamu_tidak_aktif,
 
         aum.namaAum")
-            ->where('role', 'user')
-            ->leftJoin('aum', 'users.idAum', 'aum.idAum')
-            ->groupBy('aum.namaAum')
-            ->get();
+                ->where('role', 'user')
+                ->leftJoin('aum', 'users.idAum', 'aum.idAum')
+                ->groupBy('aum.namaAum')
+                ->get();
+        } else {
+            $totalSeluruhPegawai = User::where('role', 'user')->where('idAum', $user['idAum'])->count();
+            $totalSeluruhPegawaiAktif = User::where('role', 'user')->where('isActive', true)->where('idAum', $user['idAum'])->count();
+            $totalSeluruhPegawaiNonAktif = User::where('role', 'user')->where('isActive', false)->where('idAum', $user['idAum'])->count();
 
-        // return response()->json($totalPegawaiPerAUM);
+            $totalPegawaiPerAUM = User::selectRaw("COUNT(*) as total_user,
+        SUM(CASE WHEN users.isActive = 1 THEN 1 ELSE 0 END) as total_user_active,
+        SUM(CASE WHEN users.isActive = 0 THEN 1 ELSE 0 END) as total_user_inactive,
+
+        SUM(CASE WHEN users.status = 'Pegawai Tetap Yayasan' THEN 1 ELSE 0 END) as total_pegawai_tetap_yayasan,
+        SUM(CASE WHEN users.status = 'Guru Tetap Yayasan' THEN 1 ELSE 0 END) as total_guru_tetap_yayasan,
+        SUM(CASE WHEN users.status = 'Pegawai Kontrak Yayasan' THEN 1 ELSE 0 END) as total_pegawai_kontrak_yayasan,
+        SUM(CASE WHEN users.status = 'Guru Kontrak Yayasan' THEN 1 ELSE 0 END) as total_guru_kontrak_yayasan,
+        SUM(CASE WHEN users.status = 'Guru Honor Sekolah' THEN 1 ELSE 0 END) as total_guru_honor_sekolah,
+        SUM(CASE WHEN users.status = 'Tenaga Honor Sekolah' THEN 1 ELSE 0 END) as total_tenaga_honor_sekolah,
+        SUM(CASE WHEN users.status = 'Guru Tamu' THEN 1 ELSE 0 END) as total_guru_tamu,
+
+        SUM(CASE WHEN users.status = 'Pegawai Tetap Yayasan' AND users.isActive = 1 THEN 1 ELSE 0 END) as total_pegawai_tetap_yayasan_aktif,
+        SUM(CASE WHEN users.status = 'Guru Tetap Yayasan' AND users.isActive = 1 THEN 1 ELSE 0 END) as total_guru_tetap_yayasan_aktif,
+        SUM(CASE WHEN users.status = 'Pegawai Kontrak Yayasan' AND users.isActive = 1 THEN 1 ELSE 0 END) as total_pegawai_kontrak_yayasan_aktif,
+        SUM(CASE WHEN users.status = 'Guru Kontrak Yayasan' AND users.isActive = 1 THEN 1 ELSE 0 END) as total_guru_kontrak_yayasan_aktif,
+        SUM(CASE WHEN users.status = 'Guru Honor Sekolah' AND users.isActive = 1 THEN 1 ELSE 0 END) as total_guru_honor_sekolah_aktif,
+        SUM(CASE WHEN users.status = 'Tenaga Honor Sekolah' AND users.isActive = 1 THEN 1 ELSE 0 END) as total_tenaga_honor_sekolah_aktif,
+        SUM(CASE WHEN users.status = 'Guru Tamu' AND users.isActive = 1 THEN 1 ELSE 0 END) as total_guru_tamu_aktif,
+        
+        SUM(CASE WHEN users.status = 'Pegawai Tetap Yayasan' AND users.isActive = 0 THEN 1 ELSE 0 END) as total_pegawai_tetap_yayasan_tidak_aktif,
+        SUM(CASE WHEN users.status = 'Guru Tetap Yayasan' AND users.isActive = 0 THEN 1 ELSE 0 END) as total_guru_tetap_yayasan_tidak_aktif,
+        SUM(CASE WHEN users.status = 'Pegawai Kontrak Yayasan' AND users.isActive = 0 THEN 1 ELSE 0 END) as total_pegawai_kontrak_yayasan_tidak_aktif,
+        SUM(CASE WHEN users.status = 'Guru Kontrak Yayasan' AND users.isActive = 0 THEN 1 ELSE 0 END) as total_guru_kontrak_yayasan_tidak_aktif,
+        SUM(CASE WHEN users.status = 'Guru Honor Sekolah' AND users.isActive = 0 THEN 1 ELSE 0 END) as total_guru_honor_sekolah_tidak_aktif,
+        SUM(CASE WHEN users.status = 'Tenaga Honor Sekolah' AND users.isActive = 0 THEN 1 ELSE 0 END) as total_tenaga_honor_sekolah_tidak_aktif,
+        SUM(CASE WHEN users.status = 'Guru Tamu' AND users.isActive = 0 THEN 1 ELSE 0 END) as total_guru_tamu_tidak_aktif,
+
+        aum.namaAum")
+                ->where('role', 'user')
+                ->where('users.idAum', $user['idAum'])
+                ->leftJoin('aum', 'users.idAum', 'aum.idAum')
+                ->groupBy('aum.namaAum')
+                ->get();
+        }
+
         return view('User/jumlahPegawai', [
             'detailUserPerAum' => $totalPegawaiPerAUM,
             'totalSeluruhPegawai' => $totalSeluruhPegawai,
