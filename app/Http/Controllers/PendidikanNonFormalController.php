@@ -14,12 +14,12 @@ class PendidikanNonFormalController extends Controller
     {
         $user = Auth::user();
         $listRiwayatPendidikanNonFormal = PendidikanNonFormal::where('idUser', $user['idUser'])->get();
-        return view('home/riwayatPendidikanNonFormal', ['riwayatPendidikan' => $listRiwayatPendidikanNonFormal]);
+        return view('Home/riwayatPendidikanNonFormal', ['riwayatPendidikan' => $listRiwayatPendidikanNonFormal]);
     }
 
     public function addRiwayatPendidikanNonFormalView()
     {
-        return view('home/addRiwayatPendidikanNonFormal');
+        return view('Home/addRiwayatPendidikanNonFormal');
     }
 
     public function handleAddRiwayatPendidikanNonFormal(Request $request)
@@ -61,7 +61,7 @@ class PendidikanNonFormalController extends Controller
         if (!$riwayat) {
             return abort(404);
         }
-        return view('home/editRiwayatPendidikanNonFormal', ['riwayatPendidikanNonFormal' => $riwayat]);
+        return view('Home/editRiwayatPendidikanNonFormal', ['riwayatPendidikanNonFormal' => $riwayat]);
     }
 
     public function handleEditRiwayatPendidikanNonFormal($idPendidikanNonFormal, Request $request)

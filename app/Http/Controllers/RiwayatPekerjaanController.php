@@ -15,12 +15,12 @@ class RiwayatPekerjaanController extends Controller
     {
         $user = Auth::user();
         $listRiwayatPekerjaan = RiwayatPekerjaan::where('idUser', $user['idUser'])->get();
-        return view('home/riwayatPekerjaan', ['riwayatPekerjaan' => $listRiwayatPekerjaan]);
+        return view('Home/riwayatPekerjaan', ['riwayatPekerjaan' => $listRiwayatPekerjaan]);
     }
 
     public function addRiwayatPekerjaanView()
     {
-        return view('home/addRiwayatPekerjaan');
+        return view('Home/addRiwayatPekerjaan');
     }
 
     public function handleAddRiwayatPekerjaan(Request $request)
@@ -72,7 +72,7 @@ class RiwayatPekerjaanController extends Controller
             return abort(404);
         }
 
-        return view('home/editRiwayatPekerjaan', ['riwayatPekerjaan' => $riwayat]);
+        return view('Home/editRiwayatPekerjaan', ['riwayatPekerjaan' => $riwayat]);
     }
 
     public function handleEditRiwayatPekerjaan($idRiwayatPekerjaan, Request $request)

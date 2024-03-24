@@ -14,12 +14,12 @@ class PendidikanFormalController extends Controller
     {
         $user = Auth::user();
         $listRiwayatPendidikanFormal = PendidikanFormal::where('idUser', $user['idUser'])->get();
-        return view('home/riwayatPendidikanFormal', ['riwayatPendidikan' => $listRiwayatPendidikanFormal]);
+        return view('Home/riwayatPendidikanFormal', ['riwayatPendidikan' => $listRiwayatPendidikanFormal]);
     }
 
     public function addRiwayatPendidikanFormalView()
     {
-        return view('home/addRiwayatPendidikanFormal');
+        return view('Home/addRiwayatPendidikanFormal');
     }
 
     public function handleAddRiwayatPendidikanFormal(Request $request)
@@ -63,7 +63,7 @@ class PendidikanFormalController extends Controller
             return abort('404');
         }
 
-        return view('home/editRiwayatPendidikanFormal', ['riwayatPendidikanFormal' => $riwayat]);
+        return view('Home/editRiwayatPendidikanFormal', ['riwayatPendidikanFormal' => $riwayat]);
     }
 
     public function handleEditRiwayatPendidikanFormal($idPendidikanFormal, Request $request)
